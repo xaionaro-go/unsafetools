@@ -1,3 +1,7 @@
+[![Coverage Status](https://coveralls.io/repos/github/xaionaro-go/unsafetools/badge.svg?branch=master)](https://coveralls.io/github/xaionaro-go/unsafetools?branch=master)
+[![GoDoc](https://godoc.org/github.com/xaionaro-go/unsafetools?status.svg)](https://godoc.org/github.com/xaionaro-go/unsafetools)
+[![Go Report Card](https://goreportcard.com/badge/github.com/xaionaro-go/unsafetools)](https://goreportcard.com/report/github.com/xaionaro-go/unsafetools)
+
 # Description
 
 This package provides function `FieldByName` to access to any field (including private/unexported) of a structure.
