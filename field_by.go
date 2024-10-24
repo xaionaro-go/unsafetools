@@ -11,6 +11,25 @@ type Pointer[T any] interface {
 	*T
 }
 
+// FieldByIndex receives a pointer to a struct into `obj` and returns
+// a pointer to the value of the field with index `idx` (even if it's a private field),
+// similarly to how `reflect.(*Value).Field` works.
+//
+// It will panic if it was passed non-pointer or/and to non-structure to
+// `obj`, or if field with index `idx` does not exist in the structure.
+func FieldByIndex[F any, T any, PTR Pointer[T]](obj PTR, idx int) *F {
+	return FieldByIndexInValue(reflect.ValueOf(obj), idx).Interface().(*F)
+}
+
+// FieldByIndexInValue does the same as FieldByIndex, but works with reflect.Value
+// instead of interfaces.
+func FieldByIndexInValue(v reflect.Value, idx int) reflect.Value {
+	elem := v.Elem()
+	valuePointer := (unsafe.Pointer)(elem.Field(idx).UnsafeAddr())
+	structField := elem.Type().Field(idx)
+	return reflect.NewAt(structField.Type, valuePointer)
+}
+
 // FieldByName receives a pointer to a struct into `obj` and returns
 // a pointer to the value of the field with name `fieldName` (even if it's a private field).
 //
