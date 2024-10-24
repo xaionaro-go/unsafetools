@@ -5,7 +5,7 @@ import (
 	"unsafe"
 )
 
-func BytesOf(obj interface{}) []byte {
+func BytesOf(obj any) []byte {
 	objValue := reflect.ValueOf(obj)
 	objSize := objValue.Type().Elem().Size()
 	return *(*[]byte)(unsafe.Pointer(&reflect.SliceHeader{

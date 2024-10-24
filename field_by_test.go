@@ -13,10 +13,10 @@ func TestFindByName_positive(t *testing.T) {
 
 	assert.Equal(t, ``, s.HelloWorld())
 
-	*FieldByName(s, `initialized`).(*bool) = true
+	*FieldByName[bool](s, `initialized`) = true
 	assert.Equal(t, `hello world!`, s.HelloWorld())
 
-	*FieldByName(s, `initialized`).(*bool) = false
+	*FieldByName[bool](s, `initialized`) = false
 	assert.Equal(t, ``, s.HelloWorld())
 }
 
@@ -37,16 +37,13 @@ func TestFindByName_negative(t *testing.T) {
 	}
 
 	countIfPanic(func() {
-		FieldByName(s, `wrongField`)
+		FieldByName[struct{}](s, `wrongField`)
 	})
 	countIfPanic(func() {
-		FieldByName(*s /* not pointer */, `initialized`)
-	})
-	countIfPanic(func() {
-		_ = FieldByName(s, `initialized`).(bool) /* wrong type */
+		_ = FieldByName[struct{}](s, `initialized`) /* wrong type */
 	})
 
-	assert.Equal(t, 3, panicCount)
+	assert.Equal(t, 2, panicCount)
 }
 
 func TestFindByPath_positive(t *testing.T) {
@@ -54,10 +51,10 @@ func TestFindByPath_positive(t *testing.T) {
 
 	assert.Equal(t, ``, s.HelloWorld())
 
-	*FieldByPath(s, []string{`initialized`}).(*bool) = true
+	*FieldByPath[bool](s, []string{`initialized`}) = true
 	assert.Equal(t, `hello world!`, s.HelloWorld())
 
-	*FieldByPath(s, []string{`privateStruct`, `enableBonus`}).(*bool) = true
+	*FieldByPath[bool](s, []string{`privateStruct`, `enableBonus`}) = true
 	assert.Equal(t, `hello world! (bonus!)`, s.HelloWorld())
 }
 
@@ -78,23 +75,20 @@ func TestFindByPath_negative(t *testing.T) {
 	}
 
 	countIfPanic(func() {
-		FieldByPath(s, []string{ /* empty path */ })
+		FieldByPath[struct{}](s, []string{ /* empty path */ })
 	})
 	countIfPanic(func() {
-		FieldByPath(s, []string{`wrongField`})
+		FieldByPath[struct{}](s, []string{`wrongField`})
 	})
 	countIfPanic(func() {
-		FieldByPath(s, []string{`privateStruct`, `wrongField`})
+		FieldByPath[struct{}](s, []string{`privateStruct`, `wrongField`})
 	})
 	countIfPanic(func() {
-		FieldByPath(s, []string{`privateStruct`, `enableBonus`, `extraField`})
+		FieldByPath[struct{}](s, []string{`privateStruct`, `enableBonus`, `extraField`})
 	})
 	countIfPanic(func() {
-		FieldByPath(*s /* not pointer */, []string{`initialized`})
-	})
-	countIfPanic(func() {
-		_ = FieldByPath(s, []string{`initialized`}).(bool) /* wrong type */
+		_ = FieldByPath[struct{}](s, []string{`initialized`}) /* wrong type */
 	})
 
-	assert.Equal(t, 6, panicCount)
+	assert.Equal(t, 5, panicCount)
 }
