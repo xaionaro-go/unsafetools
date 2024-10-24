@@ -13,10 +13,10 @@ func TestFindByName_positive(t *testing.T) {
 
 	assert.Equal(t, ``, s.HelloWorld())
 
-	*FieldByName[bool](s, `initialized`) = true
+	*FieldByName(s, `initialized`).(*bool) = true
 	assert.Equal(t, `hello world!`, s.HelloWorld())
 
-	*FieldByName[bool](s, `initialized`) = false
+	*FieldByName(s, `initialized`).(*bool) = false
 	assert.Equal(t, ``, s.HelloWorld())
 }
 
@@ -37,10 +37,10 @@ func TestFindByName_negative(t *testing.T) {
 	}
 
 	countIfPanic(func() {
-		FieldByName[struct{}](s, `wrongField`)
+		FieldByName(s, `wrongField`)
 	})
 	countIfPanic(func() {
-		_ = FieldByName[struct{}](s, `initialized`) /* wrong type */
+		_ = FieldByName(s, `initialized`).(bool) /* wrong type */
 	})
 
 	assert.Equal(t, 2, panicCount)

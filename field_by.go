@@ -35,8 +35,8 @@ func FieldByIndexInValue(v reflect.Value, idx int) reflect.Value {
 //
 // It will panic if it was passed non-pointer or/and to non-structure to
 // `obj`, or if field `fieldName` does not exist in the structure.
-func FieldByName[F any, T any, PTR Pointer[T]](obj PTR, fieldName string) *F {
-	return FieldByNameInValue(reflect.ValueOf(obj), fieldName).Interface().(*F)
+func FieldByName(obj any, fieldName string) any {
+	return FieldByNameInValue(reflect.ValueOf(obj), fieldName).Interface()
 }
 
 // FieldByNameInValue does the same as FieldByName, but works with reflect.Value
